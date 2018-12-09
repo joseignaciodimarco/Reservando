@@ -1,0 +1,193 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Mocha Tests</title>
+    <link href="https://unpkg.com/mocha@5.2.0/mocha.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="https://unpkg.com/chai/chai.js"></script>
+    <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../js/restaurant.js"></script>
+    <script type="text/javascript" src="../js/listado.js"></script>
+    <script type="text/javascript" src="../js/aplicacion.js"></script>
+    <script type="text/javascript" src="../js/reserva.js"></script>
+    <script>
+    window.onload = function() {
+
+      var expect = chai.expect; 
+
+      describe('Test de reservar horarios', function(){
+        it('Cuando se reserva un horario de un restaurant, el horario correspondiente se elimina del arreglo.', function(){
+          var restaurantTest = new Restaurant(1, "TAO Uptown", "Asiática", "Nueva York", ["13:00", "15:30", "18:00"], "../img/asiatica1.jpg", [6, 7, 9, 10, 5]);
+          restaurantTest.reservarHorario("15:30");
+          expect(["13:00", "18:00"]).to.eql(restaurantTest.horarios);
+        });
+
+        it('Cuando se reserva un horario de un restaurant, el horario correspondiente se elimina del arreglo.', function(){
+          var restaurantTest = new Restaurant(1, "TAO Uptown", "Asiática", "Nueva York", ["13:00", "15:30", "18:00"], "../img/asiatica1.jpg", [6, 7, 9, 10, 5]);
+          restaurantTest.reservarHorario("18:00");
+          expect(["13:00", "15:30"]).to.eql(restaurantTest.horarios);
+        });
+
+        it('Cuando se reserva un horario que el restaurant no posee, el arreglo se mantiene igual.', function(){
+          var restaurantTest = new Restaurant(1, "TAO Uptown", "Asiática", "Nueva York", ["13:00", "15:30", "18:00"], "../img/asiatica1.jpg", [6, 7, 9, 10, 5]);
+          restaurantTest.reservarHorario("17:30");
+          expect(["13:00", "15:30", "18:00"]).to.eql(restaurantTest.horarios);
+        });
+
+        it('Cuando se reserva un horario que el restaurant no posee, el arreglo se mantiene igual.', function(){
+          var restaurantTest = new Restaurant(1, "TAO Uptown", "Asiática", "Nueva York", ["13:00", "15:30", "18:00"], "../img/asiatica1.jpg", [6, 7, 9, 10, 5]);
+          restaurantTest.reservarHorario(1);
+          expect(["13:00", "15:30", "18:00"]).to.eql(restaurantTest.horarios);
+        });
+
+        it('Cuando se intenta reservar un horario pero no se le pasa ningún parámetro a la función, el arreglo se mantiene igual.', function(){
+          var restaurantTest = new Restaurant(1, "TAO Uptown", "Asiática", "Nueva York", ["13:00", "15:30", "18:00"], "../img/asiatica1.jpg", [6, 7, 9, 10, 5]);
+          restaurantTest.reservarHorario();
+          expect(["13:00", "15:30", "18:00"]).to.eql(restaurantTest.horarios);
+        });
+      });
+
+      describe('Test de obtener puntuacion', function(){
+        it('Dado un restaurant con determinadas calificaciones, la puntuación se calcula correctamente.', function(){
+          var restaurantTest =  new Restaurant(3, "Burgermeister", "Hamburguesa", "Berlín", ["11:30", "12:00", "22:30"], "../img/hamburguesa4.jpg", [5, 8, 4, 9, 9]);
+          expect(7).to.equal(restaurantTest.obtenerPuntuacion());
+        });
+
+        it('Dado un restaurant que no tiene ninguna calificación, la puntuación es igual a 0.', function(){
+          var restaurantTest =  new Restaurant(3, "Burgermeister", "Hamburguesa", "Berlín", ["11:30", "12:00", "22:30"], "../img/hamburguesa4.jpg", []);
+          expect(0).to.equal(restaurantTest.obtenerPuntuacion());
+        });
+      });
+
+      describe('Test de calificacion', function(){
+        it('Al ingresar una calificacion nueva, se agrega correctamente al array.', function(){
+          var restaurantTest = new Restaurant(14, "TGood Seed Salads & Market", "Ensalada", "Nueva York", ["17:00", "19:00", "22:30"], "../img/ensalada4.jpg", [8, 8, 8, 8, 5, 7]);
+          restaurantTest.calificar(9);
+          expect([8, 8, 8, 8, 5, 7, 9]).to.eql(restaurantTest.calificaciones);
+        });
+
+        it('Al ingresar una calificacion incorrecta, al array se mantiene igual.', function(){
+          var restaurantTest = new Restaurant(14, "TGood Seed Salads & Market", "Ensalada", "Nueva York", ["17:00", "19:00", "22:30"], "../img/ensalada4.jpg", [8, 8, 8, 8, 5, 7]);
+          restaurantTest.calificar(-1);
+          expect([8, 8, 8, 8, 5, 7]).to.eql(restaurantTest.calificaciones);
+        });
+
+        it('Al ingresar una calificacion incorrecta, al array se mantiene igual.', function(){
+          var restaurantTest = new Restaurant(14, "TGood Seed Salads & Market", "Ensalada", "Nueva York", ["17:00", "19:00", "22:30"], "../img/ensalada4.jpg", [8, 8, 8, 8, 5, 7]);
+          restaurantTest.calificar(0);
+          expect([8, 8, 8, 8, 5, 7]).to.eql(restaurantTest.calificaciones);
+        });
+
+         it('Al ingresar una calificacion incorrecta, al array se mantiene igual.', function(){
+          var restaurantTest = new Restaurant(14, "TGood Seed Salads & Market", "Ensalada", "Nueva York", ["17:00", "19:00", "22:30"], "../img/ensalada4.jpg", [8, 8, 8, 8, 5, 7]);
+          restaurantTest.calificar(-11);
+          expect([8, 8, 8, 8, 5, 7]).to.eql(restaurantTest.calificaciones);
+        });
+
+        it('Al ingresar una calificacion incorrecta, al array se mantiene igual.', function(){
+          var restaurantTest = new Restaurant(14, "TGood Seed Salads & Market", "Ensalada", "Nueva York", ["17:00", "19:00", "22:30"], "../img/ensalada4.jpg", [8, 8, 8, 8, 5, 7]);
+          restaurantTest.calificar("aaa");
+          expect([8, 8, 8, 8, 5, 7]).to.eql(restaurantTest.calificaciones);
+        });
+      });
+
+      describe('Test de buscar restaurante', function(){
+        var listadoTest = new Listado(listadoDeRestaurantes);
+        
+        it('Dado un id se obtiene un objeto.', function(){          
+          expect(listadoTest.buscarRestaurante(1)).to.be.an('object');
+        });
+
+        it('Dado un id se obtiene un objeto con el nombre del restaurant correspondiente.', function(){          
+          expect(listadoTest.buscarRestaurante(1).nombre).to.equal( "TAO Uptown");
+        });
+
+        it('Dado un id incorrecto se obtiene un string como resultado.', function(){          
+          expect(listadoTest.buscarRestaurante(-1)).to.be.an("string");
+        });
+
+        it('Dado un id incorrecto se obtiene un string como resultado.', function(){          
+          expect(listadoTest.buscarRestaurante(0)).to.be.an("string");
+        });
+
+        it('Dado un id incorrecto se obtiene un string como resultado.', function(){          
+          expect(listadoTest.buscarRestaurante(500)).to.be.an("string");
+        });
+
+        it('Dado un id incorrecto se obtiene un string como resultado.', function(){          
+          expect(listadoTest.buscarRestaurante("a")).to.be.an("string");
+        });
+
+        it('Dado un id incorrecto se obtiene el mensaje de error correcto.', function(){          
+          expect(listadoTest.buscarRestaurante("a")).to.be.equal("No se ha encontrado ningún restaurant");
+        });
+      });
+
+      describe('Test de obtener restaurantes', function(){
+        var listadTest = new Listado(listadoDeRestaurantes);
+        
+        it('Dado un rubro determinado se obtiene un array como resultado.', function(){          
+          expect(listadTest.obtenerRestaurantes("Hamburguesa", null, null)).to.be.an('array');
+        });
+
+        it('Dado un rubro determinado se obtiene un array con la longitud correcta.', function(){          
+          expect(listadTest.obtenerRestaurantes("Hamburguesa", null, null).length).to.be.equal(4);
+        });
+
+        it('Dado un rubro incorrecto se obtiene un array vacio.', function(){          
+          expect(listadTest.obtenerRestaurantes("India", null, null).length).to.be.equal(0);
+        });
+
+        it('Dada una ubicacion se obtiene un array con la longitud correcta.', function(){          
+          expect(listadTest.obtenerRestaurantes(null, "París", null).length).to.be.equal(6);
+        });
+
+        it('Dada una ubicacion incorrecta se obtiene un array vacio.', function(){          
+          expect(listadTest.obtenerRestaurantes(null, "Hong Kong", null).length).to.be.equal(0);
+        });
+
+        it('Dada una horario se obtiene un array con la longitud correspondiente.', function(){          
+          expect(listadTest.obtenerRestaurantes(null, null, "15:30").length).to.be.equal(4);
+        });
+
+        it('Dada una horario incorrecto se obtiene un array vacio.', function(){          
+          expect(listadTest.obtenerRestaurantes(null, null, "23:59").length).to.be.equal(0);
+        });
+
+        it('Si no se especifica rubro se obtiene un array con todos los restaurantes.', function(){          
+          expect(listadTest.obtenerRestaurantes(null, null, null).length).to.be.equal(24);
+        });
+      });
+
+      describe('Test calcula precio reservas', function(){
+        it('Se calcula el precio base de reserva correctamente.', function(){          
+          var reservaTest = new Reserva (new Date(2018, 7, 24, 11, 00), 8, 350, "DES1");
+          expect(reservaTest.precioBaseReserva()).to.be.equal(2800);
+        });
+
+        it('Se calcula el precio total de reserva correctamente.', function(){          
+          var reservaTest = new Reserva (new Date(2018, 7, 24, 11, 00), 8, 350, "DES1");
+          expect(reservaTest.precioTotalReserva()).to.be.equal(2450);
+        });
+
+        it('Se calcula el precio base de reserva correctamente.', function(){          
+          var reservaTest = new Reserva (new Date(2018, 7, 27, 14, 100), 2, 150, "DES200");
+          expect(reservaTest.precioBaseReserva()).to.be.equal(300);
+        });
+
+        it('Se calcula el precio total de reserva correctamente.', function(){          
+          var reservaTest = new Reserva (new Date(2018, 7, 27, 14, 100), 2, 150, "DES200");
+          expect(reservaTest.precioTotalReserva()).to.be.equal(100);
+        });
+      });
+
+      
+    mocha.run()
+    };
+    </script>
+  </body>
+</html>
